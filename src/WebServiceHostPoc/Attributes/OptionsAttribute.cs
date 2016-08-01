@@ -1,19 +1,29 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
+using static System.Net.Http.HttpMethod;
 
 namespace WebServiceHostPoc.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    /// <summary>
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates an <see cref="Options"/> method.
+    /// </summary>
     public class OptionsAttribute : HttpMethodAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="OptionsAttribute"/>.
+        /// </summary>
         public OptionsAttribute()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="OptionsAttribute"/> specifying a <paramref name="path"/>.
+        /// </summary>
+        /// <param name="path">The URL path of this <see cref="OptionsAttribute"/>.</param>
         public OptionsAttribute(string path) : base(path)
         {
         }
 
-        public override HttpMethod HttpMethod => HttpMethod.Options;
+        /// <inheritdoc/>
+        public override HttpMethod HttpMethod => Options;
     }
 }
