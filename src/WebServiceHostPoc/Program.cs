@@ -4,8 +4,15 @@ using WebServiceHostPoc.Attributes;
 
 namespace WebServiceHostPoc
 {
+    /// <summary>
+    /// The class that contains this program entry point.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The entry point of this application.
+        /// </summary>
+        /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
         {
             var webHost = new WebHostBuilder()

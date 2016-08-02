@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using FluentAssertions;
-using WebServiceHostPoc;
 using WebServiceHostPoc.Attributes;
 using Xunit;
+using System.Reflection;
 
-namespace Tests
+namespace WebServiceHostPoc.Unit.Tests
 {
     public class GetAttributeUnitTests
     {
@@ -21,13 +18,10 @@ namespace Tests
         [Fact]
         public void GetAttributeClass_ShouldBeAnHttpMethodAttribute()
         {
-            Expression<Func<AttributeUsageAttribute, bool>> expectedAttributeUsage = attribute =>
-                !attribute.AllowMultiple &&
-                attribute.Inherited &&
-                attribute.ValidOn == AttributeTargets.Method;
-
             GetAttribute.Should().BeAssignableTo<HttpMethodAttribute>();
-            GetAttribute.GetType().Should().BeDecoratedWith(expectedAttributeUsage);
+            GetAttribute.GetType().GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true)
+                .Should().HaveCount(1)
+                .And.ContainSingle(_ => !_.AllowMultiple && _.Inherited && _.ValidOn == AttributeTargets.Method);
         }
     }
 }

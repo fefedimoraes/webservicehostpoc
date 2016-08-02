@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>1bb971e5-e52f-41b0-a3de-1f621a5bb45e</ProjectGuid>
-    <RootNamespace>Tests</RootNamespace>
+    <ProjectGuid>59ddb706-3d10-43b0-b1d4-253106175e8d</ProjectGuid>
+    <RootNamespace>WebServiceHostPoc.Integration.Tests</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
