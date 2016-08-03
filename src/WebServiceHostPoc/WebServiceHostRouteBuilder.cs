@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using WebServiceHostPoc.Attributes;
+using WebServiceHostPoc.Attributes.HttpMethods;
 
 namespace WebServiceHostPoc
 {

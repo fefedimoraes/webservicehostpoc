@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using static System.Net.Http.HttpMethod;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
-    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="Head"/> method.
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="System.Net.Http.HttpMethod.Head"/> method.
     /// </summary>
-    public class HeadAttribute : HttpMethodAttribute
+    public sealed class HeadAttribute : HttpMethodAttribute
     {
         /// <summary>
         /// Initializes a new instance of <see cref="HeadAttribute"/>.
@@ -24,6 +23,6 @@ namespace WebServiceHostPoc.Attributes
         }
 
         /// <inheritdoc/>
-        public override HttpMethod HttpMethod => Head;
+        public override HttpMethod HttpMethod => HttpMethod.Head;
     }
 }

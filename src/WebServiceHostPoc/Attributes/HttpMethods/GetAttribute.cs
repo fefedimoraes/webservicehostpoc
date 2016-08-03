@@ -1,12 +1,11 @@
 using System.Net.Http;
-using static System.Net.Http.HttpMethod;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
-    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="Get"/> method.
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="System.Net.Http.HttpMethod.Get"/> method.
     /// </summary>
-    public class GetAttribute : HttpMethodAttribute
+    public sealed class GetAttribute : HttpMethodAttribute
     {
         /// <summary>
         /// Initializes a new instance of <see cref="GetAttribute"/>.
@@ -24,6 +23,6 @@ namespace WebServiceHostPoc.Attributes
         }
 
         /// <inheritdoc/>
-        public override HttpMethod HttpMethod => Get;
+        public override HttpMethod HttpMethod => HttpMethod.Get;
     }
 }

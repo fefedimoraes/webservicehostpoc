@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
-using WebServiceHostPoc.Attributes;
+using WebServiceHostPoc.Attributes.HttpMethods;
 
 namespace WebServiceHostPoc
 {

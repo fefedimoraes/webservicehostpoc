@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
     /// Base class for HTTP Methods Attributes.

@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using static System.Net.Http.HttpMethod;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
-    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="Post"/> method.
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="System.Net.Http.HttpMethod.Post"/> method.
     /// </summary>
-    public class PostAttribute : HttpMethodAttribute
+    public sealed class PostAttribute : HttpMethodAttribute
     {
         /// <summary>
         /// Initializes a new instance of <see cref="PostAttribute"/>.
@@ -24,6 +23,6 @@ namespace WebServiceHostPoc.Attributes
         }
 
         /// <inheritdoc/>
-        public override HttpMethod HttpMethod => Post;
+        public override HttpMethod HttpMethod => HttpMethod.Post;
     }
 }

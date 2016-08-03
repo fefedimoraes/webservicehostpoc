@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
-using WebServiceHostPoc.Attributes;
+using WebServiceHostPoc.Attributes.HttpMethods;
 using Xunit;
 
 namespace WebServiceHostPoc.Integration.Tests

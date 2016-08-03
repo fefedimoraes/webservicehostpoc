@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using static System.Net.Http.HttpMethod;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
-    /// An <see cref="HttpMethodAttribute"/> that encapsulates an <see cref="Options"/> method.
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates an <see cref="System.Net.Http.HttpMethod.Options"/> method.
     /// </summary>
-    public class OptionsAttribute : HttpMethodAttribute
+    public sealed class OptionsAttribute : HttpMethodAttribute
     {
         /// <summary>
         /// Initializes a new instance of <see cref="OptionsAttribute"/>.
@@ -24,6 +23,6 @@ namespace WebServiceHostPoc.Attributes
         }
 
         /// <inheritdoc/>
-        public override HttpMethod HttpMethod => Options;
+        public override HttpMethod HttpMethod => HttpMethod.Options;
     }
 }

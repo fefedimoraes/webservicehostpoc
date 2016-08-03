@@ -5,7 +5,7 @@ namespace WebServiceHostPoc.Extensions
     /// <summary>
     /// Contains extension methods to <see cref="IEnumerable{T}"/>.
     /// </summary>
-    internal static class EnumerableExtensions
+    public static class EnumerableExtensions
     {
         /// <summary>
         /// Concatenates the members of the provided <paramref name="enumerable"/>,

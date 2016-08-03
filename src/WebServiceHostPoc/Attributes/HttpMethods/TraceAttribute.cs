@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using static System.Net.Http.HttpMethod;
 
-namespace WebServiceHostPoc.Attributes
+namespace WebServiceHostPoc.Attributes.HttpMethods
 {
     /// <summary>
-    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="Trace"/> method.
+    /// An <see cref="HttpMethodAttribute"/> that encapsulates a <see cref="System.Net.Http.HttpMethod.Trace"/> method.
     /// </summary>
-    public class TraceAttribute : HttpMethodAttribute
+    public sealed class TraceAttribute : HttpMethodAttribute
     {
         /// <summary>
         /// Initializes a new instance of <see cref="TraceAttribute"/>.
@@ -24,6 +23,6 @@ namespace WebServiceHostPoc.Attributes
         }
 
         /// <inheritdoc/>
-        public override HttpMethod HttpMethod => Trace;
+        public override HttpMethod HttpMethod => HttpMethod.Trace;
     }
 }

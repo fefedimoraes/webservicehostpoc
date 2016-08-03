@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentAssertions;
-using WebServiceHostPoc.Attributes;
 using Xunit;
 using System.Reflection;
+using WebServiceHostPoc.Attributes.HttpMethods;
 
 namespace WebServiceHostPoc.Unit.Tests
 {

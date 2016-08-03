@@ -13,9 +13,6 @@ namespace WebServiceHostPoc.Integration.Tests
 
         private TextWriter CurrentWriter { get; }
 
-        public void Dispose()
-        {
-            Console.SetOut(CurrentWriter);
-        }
+        public void Dispose() => Console.SetOut(CurrentWriter);
     }
 }
