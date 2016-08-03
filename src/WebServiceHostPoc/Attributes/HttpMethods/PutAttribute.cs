@@ -15,10 +15,10 @@ namespace WebServiceHostPoc.Attributes.HttpMethods
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="PutAttribute"/> specifying a <paramref name="path"/>.
+        /// Initializes a new instance of <see cref="PutAttribute"/> specifying a <paramref name="template"/>.
         /// </summary>
-        /// <param name="path">The URL path of this <see cref="PutAttribute"/>.</param>
-        public PutAttribute(string path) : base(path)
+        /// <param name="template">The URL Template of this <see cref="PutAttribute"/>.</param>
+        public PutAttribute(string template) : base(template)
         {
         }
 

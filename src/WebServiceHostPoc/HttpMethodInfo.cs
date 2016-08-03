@@ -16,30 +16,30 @@ namespace WebServiceHostPoc
     {
         /// <summary>
         /// Initializes a new instance of <see cref="HttpMethodInfo"/>,
-        /// using the provided <paramref name="httpMethod"/>,
-        /// <paramref name="methodInfo"/> and <paramref name="urlPath"/>.
+        /// using the provided <paramref name="template"/>,
+        /// <paramref name="httpMethod"/> and <paramref name="methodInfo"/>.
         /// </summary>
+        /// <param name="template">
+        /// The URL path that will serve as a route template to the <paramref name="methodInfo"/>.
+        /// </param>
         /// <param name="httpMethod">
         /// The <see cref="HttpMethod"/> which the <paramref name="methodInfo"/> will be accessible from.
         /// </param>
         /// <param name="methodInfo">
         /// The <see cref="MethodInfo"/> to be HTTP accessible.
         /// </param>
-        /// <param name="urlPath">
-        /// The URL path that will serve as a route template to the <paramref name="methodInfo"/>.
-        /// </param>
-        public HttpMethodInfo(HttpMethod httpMethod, MethodInfo methodInfo, string urlPath)
+        public HttpMethodInfo(string template, HttpMethod httpMethod, MethodInfo methodInfo)
         {
+            ExplicitTemplate = template;
             HttpMethod = httpMethod;
             MethodInfo = methodInfo;
             Parameters = methodInfo.GetParameters();
-            UrlPath = urlPath;
         }
 
         /// <summary>
         /// Gets the URL route template of this <see cref="HttpMethodInfo"/>.
         /// </summary>
-        public string Template => string.IsNullOrWhiteSpace(UrlPath) ? TemplateFromMethodInfo : UrlPath;
+        public string Template => string.IsNullOrWhiteSpace(ExplicitTemplate) ? TemplateFromMethodInfo : ExplicitTemplate;
 
         /// <summary>
         /// Gets the <see cref="HttpMethod"/> of this <see cref="HttpMethodInfo"/>.
@@ -49,7 +49,7 @@ namespace WebServiceHostPoc
         /// <summary>
         /// Gets the configured URL path of this <see cref="HttpMethodInfo"/>.
         /// </summary>
-        private string UrlPath { get; }
+        private string ExplicitTemplate { get; }
 
         /// <summary>
         /// Gets the route template from the <see cref="MethodInfo"/>.

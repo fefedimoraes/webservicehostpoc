@@ -51,7 +51,7 @@ namespace WebServiceHostPoc
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="HttpMethodInfo"/>s.</returns>
         private static IEnumerable<HttpMethodInfo> ToHttpMethods(MethodInfo method) => method
             .GetCustomAttributes<HttpMethodAttribute>()
-            .Select(attribute => new HttpMethodInfo(attribute.HttpMethod, method, attribute.Path));
+            .Select(attribute => new HttpMethodInfo(attribute.Template, attribute.HttpMethod, method));
 
         /// <summary>
         /// Maps the provided <paramref name="method"/>

@@ -15,10 +15,10 @@ namespace WebServiceHostPoc.Attributes.HttpMethods
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="GetAttribute"/> specifying a <paramref name="path"/>.
+        /// Initializes a new instance of <see cref="GetAttribute"/> specifying a <paramref name="template"/>.
         /// </summary>
-        /// <param name="path">The URL path of this <see cref="GetAttribute"/>.</param>
-        public GetAttribute(string path) : base(path)
+        /// <param name="template">The URL Template of this <see cref="GetAttribute"/>.</param>
+        public GetAttribute(string template) : base(template)
         {
         }
 

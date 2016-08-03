@@ -19,12 +19,12 @@ namespace WebServiceHostPoc.Attributes.HttpMethods
 
         /// <summary>
         /// Initializes a new instance of <see cref="HttpMethodAttribute"/>
-        /// with the provided <paramref name="path"/>.
+        /// with the provided <paramref name="template"/>.
         /// </summary>
-        /// <param name="path">The URL path of this <see cref="HttpMethodAttribute"/>.</param>
-        protected HttpMethodAttribute(string path)
+        /// <param name="template">The URL Template of this <see cref="HttpMethodAttribute"/>.</param>
+        protected HttpMethodAttribute(string template)
         {
-            Path = path;
+            Template = template;
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace WebServiceHostPoc.Attributes.HttpMethods
         public abstract HttpMethod HttpMethod { get; }
 
         /// <summary>
-        /// Gets the URL path of this <see cref="HttpMethodAttribute"/>.
+        /// Gets the URL Template of this <see cref="HttpMethodAttribute"/>.
         /// </summary>
-        public string Path { get; }
+        public string Template { get; }
     }
 }
