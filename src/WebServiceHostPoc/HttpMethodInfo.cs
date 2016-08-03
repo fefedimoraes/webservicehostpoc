@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using WebServiceHostPoc.Attributes.Parameters;
 using WebServiceHostPoc.Extensions;
 
 namespace WebServiceHostPoc
@@ -14,6 +14,8 @@ namespace WebServiceHostPoc
     /// </summary>
     public class HttpMethodInfo
     {
+        private static readonly ParameterAttribute DefaultParameterAttribute = new QueryStringAttribute();
+
         /// <summary>
         /// Initializes a new instance of <see cref="HttpMethodInfo"/>,
         /// using the provided <paramref name="template"/>,
@@ -39,7 +41,7 @@ namespace WebServiceHostPoc
         /// <summary>
         /// Gets the URL route template of this <see cref="HttpMethodInfo"/>.
         /// </summary>
-        public string Template => string.IsNullOrWhiteSpace(ExplicitTemplate) ? TemplateFromMethodInfo : ExplicitTemplate;
+        public string Template => string.IsNullOrWhiteSpace(ExplicitTemplate) ? ComputedTemplate : ExplicitTemplate;
 
         /// <summary>
         /// Gets the <see cref="HttpMethod"/> of this <see cref="HttpMethodInfo"/>.
@@ -54,7 +56,8 @@ namespace WebServiceHostPoc
         /// <summary>
         /// Gets the route template from the <see cref="MethodInfo"/>.
         /// </summary>
-        private string TemplateFromMethodInfo => $"{MethodInfo.Name}/{Parameters.Select(ToParameterTemplateName).Join("/")}";
+        private string ComputedTemplate =>
+            $"{MethodInfo.Name}/{Parameters.Where(IsInUriPath).Select(ToParameterUriName).Join("/")}";
 
         /// <summary>
         /// Gets the <see cref="MethodInfo"/> of this <see cref="HttpMethodInfo"/>.
@@ -75,14 +78,18 @@ namespace WebServiceHostPoc
         /// <returns>A <see cref="Task"/> that represents the completion of request processing.</returns>
         public Task Invoke(object instance, HttpContext context)
         {
-            var parameters = Parameters.Select(parameter =>
-            {
-                var routeValue = context.GetRouteValue(parameter.Name);
-                return Convert.ChangeType(routeValue, parameter.ParameterType);
-            }).ToArray();
-
             try
             {
+                var parameters = Parameters.Select(parameter =>
+                {
+                    object value;
+                    var attribute = parameter.GetCustomAttribute<ParameterAttribute>() ?? DefaultParameterAttribute;
+                    if (attribute.TryGetValue(parameter, context, out value))
+                        return Convert.ChangeType(value, parameter.ParameterType);
+                    if (parameter.HasDefaultValue) return parameter.DefaultValue;
+                    throw new ArgumentException();
+                }).ToArray();
+
                 var result = MethodInfo.Invoke(instance, parameters);
                 if (result != null) return context.Response.WriteAsJsonAsync(result);
 
@@ -103,10 +110,8 @@ namespace WebServiceHostPoc
         /// <returns>
         /// A <see cref="string"/> that represents the provided <paramref name="parameterInfo"/> in a route template.
         /// </returns>
-        private static string ToParameterTemplateName(ParameterInfo parameterInfo)
-        {
-            var name = parameterInfo.Name;
-            return $"{{{name}}}";
-        }
+        private static string ToParameterUriName(ParameterInfo parameterInfo) => $"{{{parameterInfo.Name}}}";
+
+        private static bool IsInUriPath(ParameterInfo parameterInfo) => parameterInfo.GetCustomAttributes<UriAttribute>().Any();
     }
 }
