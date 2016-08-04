@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,14 +15,14 @@ namespace WebServiceHostPoc.Integration.Tests
     {
         public SimpleServiceIntegrationTests()
         {
-            const string baseUrl = "http://127.0.0.1:8080/myservice";
+            const string baseUrl = "http://127.0.0.1:8080/simpleservice";
 
             HttpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
             WebHost = new WebHostBuilder()
                 .CaptureStartupErrors(true)
                 .UseKestrel()
-                .UseWebServiceHost(new MyService())
+                .UseWebServiceHost(new SimpleService())
                 .UseUrls(baseUrl)
                 .Build();
 
@@ -38,17 +39,17 @@ namespace WebServiceHostPoc.Integration.Tests
             HttpClient.Dispose();
         }
 
-        [Fact]
-        public async Task OnGettingWriteToConsole_ShouldRespondNoContent_ShouldWriteToConsole()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("message with whitespaces")]
+        public async Task OnGettingWriteToConsole_ShouldRespondNoContent_ShouldWriteToConsole(string message)
         {
-            const string message = "message with whitespaces";
-
             // Arrange
             using (var stringWriter = new StringWriter())
             using (new ConsoleStreamSwitcher(stringWriter))
             {
                 // Act
-                var response = await HttpClient.GetAsync($"writetoconsole/{message}");
+                var response = await HttpClient.GetAsync($"writetoconsole?message={message}");
 
                 // Assert
                 response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -56,7 +57,21 @@ namespace WebServiceHostPoc.Integration.Tests
             }
         }
 
-        private interface IMyService
+        [Theory]
+        [InlineData(10, 7, 17)]
+        [InlineData(-10, -7, -17)]
+        public async Task OnGettingSum_ShouldRespondOk_ShouldContainResultInResponseBody(int a, int b, int expected)
+        {
+            // Act
+            var response = await HttpClient.GetAsync($"sum?a={a}&b={b}");
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var responseContent = await response.Content.DeserializeAsJsonAsync<int>();
+            responseContent.Should().Be(expected);
+        }
+
+        private interface ISimpleService
         {
             [Get]
             void WriteToConsole(string message);
@@ -65,7 +80,7 @@ namespace WebServiceHostPoc.Integration.Tests
             int Sum(int a, int b);
         }
 
-        private class MyService : IMyService
+        private class SimpleService : ISimpleService
         {
             public void WriteToConsole(string message) => Console.WriteLine(message);
 

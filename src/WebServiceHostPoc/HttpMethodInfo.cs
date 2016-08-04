@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -54,12 +55,6 @@ namespace WebServiceHostPoc
         private string ExplicitTemplate { get; }
 
         /// <summary>
-        /// Gets the route template from the <see cref="MethodInfo"/>.
-        /// </summary>
-        private string ComputedTemplate =>
-            $"{MethodInfo.Name}/{Parameters.Where(IsInUriPath).Select(ToParameterUriName).Join("/")}";
-
-        /// <summary>
         /// Gets the <see cref="MethodInfo"/> of this <see cref="HttpMethodInfo"/>.
         /// </summary>
         private MethodInfo MethodInfo { get; }
@@ -68,6 +63,19 @@ namespace WebServiceHostPoc
         /// Gets the array of <see cref="ParameterInfo"/> from the <see cref="MethodInfo"/>.
         /// </summary>
         private ParameterInfo[] Parameters { get; }
+
+        /// <summary>
+        /// Gets the concatenated <see cref="string"/> that contains all parameters that are part of the template route.
+        /// </summary>
+        private string RouteTemplateParameters => Parameters
+            .Where(ParameterInfoExtensions.IsRouteTemplateParameter)
+            .Select(ParameterInfoExtensions.ToRouteTemplateParameterName)
+            .Join("/");
+
+        /// <summary>
+        /// Gets the route template from the <see cref="MethodInfo"/>.
+        /// </summary>
+        private string ComputedTemplate => $"{MethodInfo.Name}/{RouteTemplateParameters}";
 
         /// <summary>
         /// Invokes the method represented by this <see cref="HttpMethodInfo"/>
@@ -80,15 +88,7 @@ namespace WebServiceHostPoc
         {
             try
             {
-                var parameters = Parameters.Select(parameter =>
-                {
-                    object value;
-                    var attribute = parameter.GetCustomAttribute<ParameterAttribute>() ?? DefaultParameterAttribute;
-                    if (attribute.TryGetValue(parameter, context, out value))
-                        return Convert.ChangeType(value, parameter.ParameterType);
-                    if (parameter.HasDefaultValue) return parameter.DefaultValue;
-                    throw new ArgumentException();
-                }).ToArray();
+                var parameters = GetParameterValues(context).ToArray();
 
                 var result = MethodInfo.Invoke(instance, parameters);
                 if (result != null) return context.Response.WriteAsJsonAsync(result);
@@ -103,15 +103,26 @@ namespace WebServiceHostPoc
             }
         }
 
-        /// <summary>
-        /// Converts the provided <paramref name="parameterInfo"/> to its route template definition.
-        /// </summary>
-        /// <param name="parameterInfo">The <see cref="ParameterInfo"/> to be converted.</param>
-        /// <returns>
-        /// A <see cref="string"/> that represents the provided <paramref name="parameterInfo"/> in a route template.
-        /// </returns>
-        private static string ToParameterUriName(ParameterInfo parameterInfo) => $"{{{parameterInfo.Name}}}";
+        private IEnumerable<object> GetParameterValues(HttpContext context)
+        {
+            foreach (var parameter in Parameters)
+            {
+                object value;
+                var attribute = parameter.GetCustomAttribute<ParameterAttribute>() ?? DefaultParameterAttribute;
 
-        private static bool IsInUriPath(ParameterInfo parameterInfo) => parameterInfo.GetCustomAttributes<UriAttribute>().Any();
+                if (attribute.TryGetValue(parameter, context, out value))
+                {
+                    yield return Convert.ChangeType(value, parameter.ParameterType);
+                }
+                else if (parameter.HasDefaultValue)
+                {
+                    yield return parameter.DefaultValue;
+                }
+                else
+                {
+                    throw new ArgumentException(parameter.Name);
+                }
+            }
+        }
     }
 }

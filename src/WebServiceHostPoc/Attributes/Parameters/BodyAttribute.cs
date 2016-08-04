@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace WebServiceHostPoc.Attributes.Parameters
 {
@@ -12,7 +14,13 @@ namespace WebServiceHostPoc.Attributes.Parameters
         /// <inheritdoc/>
         public override bool TryGetValue(ParameterInfo parameterInfo, HttpContext httpContext, out object value)
         {
-            throw new NotImplementedException();
+            using (var streamReader = new StreamReader(httpContext.Request.Body))
+            using (var jsonTextReader = new JsonTextReader(streamReader))
+            {
+                var serializer = JsonSerializer.Create();
+                value = serializer.Deserialize(jsonTextReader, parameterInfo.ParameterType);
+                return true;
+            }
         }
     }
 }
