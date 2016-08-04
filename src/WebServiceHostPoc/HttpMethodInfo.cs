@@ -103,6 +103,11 @@ namespace WebServiceHostPoc
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="Parameters"/> values from the provided <paramref name="context"/>.
+        /// </summary>
+        /// <param name="context">The instance of <see cref="HttpContext"/> to extract values from.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> containing the <see cref="Parameters"/> values.</returns>
         private IEnumerable<object> GetParameterValues(HttpContext context)
         {
             foreach (var parameter in Parameters)

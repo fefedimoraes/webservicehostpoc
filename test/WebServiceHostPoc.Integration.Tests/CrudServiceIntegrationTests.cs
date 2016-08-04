@@ -40,7 +40,7 @@ namespace WebServiceHostPoc.Integration.Tests
         }
 
         [Fact]
-        public async Task Test()
+        public async Task OnStoringAndReading_ShouldRespondAccordingly()
         {
             const string id = "123";
 
